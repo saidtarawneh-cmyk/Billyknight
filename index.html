@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billy Knight | Official Movie Site</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&family=Pinyon+Script&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #050a12;
+            --primary-blue: #0d1b2a;
+            --secondary-blue: #1b263b;
+            --accent-gold: #c9a227;
+            --accent-gold-light: #e8d5a3;
+            --accent-gold-muted: #8b7355;
+            --text-white: #f0f0f0;
+            --text-gray: #a0a0a0;
+            --text-muted: #6b7280;
+            --spotlight-blue: #1e4a6d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--primary-dark);
+            color: var(--text-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        @media (min-width: 1024px) {
+            .main-container {
+                flex-direction: row;
+            }
+        }
+
+        /* Hero / Poster Section */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            background: var(--primary-dark);
+            overflow: hidden;
+        }
+
+        @media (min-width: 1024px) {
+            .hero-section {
+                width: 50%;
+                min-height: 100vh;
+                position: sticky;
+                top: 0;
+            }
+        }
+
+        .poster-placeholder {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+
+        .poster-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center;
+        }
+
+        .hero-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(to bottom, transparent, var(--primary-dark) 70%, var(--secondary-blue));
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .poster-placeholder-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 2rem;
+            border: 2px dashed var(--secondary-blue);
+            border-radius: 8px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            padding-bottom: 3rem;
+            width: 100%;
+        }
+
+        .actor-names {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding: 0 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .actor-name {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 2rem;
+            color: var(--accent-gold);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 30px rgba(201, 162, 39, 0.3);
+        }
+
+        @media (min-width: 1024px) {
+            .actor-name {
+                font-size: 2.5rem;
+            }
+        }
+
+        .director-credit {
+            font-family: 'Cormorant Garamond', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--text-gray);
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .movie-title {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 4rem;
+            color: var(--accent-gold);
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8), 0 0 40px rgba(201, 162, 39, 0.4);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .movie-title {
+                font-size: 5.5rem;
+            }
+        }
+
+        .tagline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.1rem;
+            color: var(--text-gray);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        .release-info {
+            font-size: 0.85rem;
+            color: var(--accent-gold-muted);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 500;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Showtimes Section */
+        .showtimes-section {
+            flex: 1;
+            background: linear-gradient(to bottom, var(--secondary-blue), var(--primary-blue));
+            padding: 2rem 1.5rem;
+            padding-top: 5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .showtimes-section {
+                width: 50%;
+                padding: 6rem 3rem 3rem;
+                overflow-y: auto;
+                max-height: 100vh;
+            }
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-icon {
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-icon svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-muted);
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            padding: 1rem 0;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            color: var(--primary-dark);
+            background: transparent;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: var(--accent-gold-muted);
+        }
+
+        .filter-btn {
+            padding: 1rem 1.25rem;
+            border: none;
+            border-left: 1px solid #e0e0e0;
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-dark);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            transition: background 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background: #f5f5f5;
+        }
+
+        .filter-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: var(--primary-dark);
+        }
+
+        /* Date Picker */
+        .date-picker {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            margin-bottom: 2rem;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .date-picker::-webkit-scrollbar {
+            display: none;
+        }
+
+        .date-item {
+            flex-shrink: 0;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 70px;
+        }
+
+        .date-item:hover {
+            border-color: var(--accent-gold);
+        }
+
+        .date-item.active {
+            background: rgba(201, 162, 39, 0.2);
+            border-color: var(--accent-gold);
+        }
+
+        .date-month {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .date-day {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-white);
+            line-height: 1.2;
+        }
+
+        .date-weekday {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+        }
+
+        /* Showtimes Header */
+        .showtimes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .showtimes-title {
+            font-size: 1rem;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            background: transparent;
+            border: none;
+            padding: 0.5rem;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+
+        .view-btn:hover,
+        .view-btn.active {
+            opacity: 1;
+        }
+
+        .view-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-white);
+        }
+
+        /* No Showtimes State */
+        .no-showtimes {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .no-showtimes-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 1.5rem;
+            opacity: 0.3;
+        }
+
+        .no-showtimes-icon svg {
+            width: 100%;
+            height: 100%;
+            stroke: var(--accent-gold);
+        }
+
+        .no-showtimes h3 {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 1.75rem;
+            color: var(--text-white);
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .no-showtimes p {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--text-gray);
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 320px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+
+        .coming-soon-badge {
+            display: inline-block;
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.75rem;
+            background: transparent;
+            color: var(--text-white);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .coming-soon-badge:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Synopsis Section */
+        .synopsis-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .synopsis-title {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 1.5rem;
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .synopsis-text {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+
+        /* Social Links */
+        .social-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .social-link:hover {
+            background: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .social-link:hover svg {
+            fill: var(--primary-dark);
+        }
+
+        .social-link svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-white);
+            transition: fill 0.3s ease;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .footer-text a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-text a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content > * {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .actor-names { animation-delay: 0.1s; }
+        .director-credit { animation-delay: 0.2s; }
+        .movie-title { animation-delay: 0.3s; }
+        .tagline { animation-delay: 0.4s; }
+        .release-info { animation-delay: 0.5s; }
+
+        /* Scrollbar for desktop */
+        @media (min-width: 1024px) {
+            .showtimes-section::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .showtimes-section::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .showtimes-section::-webkit-scrollbar-thumb {
+                background: var(--accent-gold-muted);
+                border-radius: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main class="main-container">
+        <!-- Hero / Poster Section -->
+        <section class="hero-section">
+            <!-- Movie Poster -->
+            <div class="poster-placeholder">
+                <img src="Images/New.png" alt="Billy Knight Movie Poster">
+            </div>
+
+            <div class="hero-content">
+                <div class="actor-names">
+                    <span class="actor-name">Pacino</span>
+                    <span class="actor-name">Heaton</span>
+                </div>
+                <p class="director-credit">An Alec Griffen Roth film</p>
+                <h1 class="movie-title">Billy Knight</h1>
+                <p class="tagline">A Tinseltown Fairytale</p>
+                <p class="release-info">Coming 2026</p>
+            </div>
+
+            <div class="hero-fade"></div>
+        </section>
+
+        <!-- Showtimes Section -->
+        <section class="showtimes-section">
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-bar">
+                    <div class="search-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path d="m21 21-4.3-4.3"></path>
+                        </svg>
+                    </div>
+                    <input type="text" class="search-input" placeholder="Enter city or zip code" id="locationInput">
+                    <button class="filter-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="4" y1="6" x2="20" y2="6"></line>
+                            <line x1="6" y1="12" x2="18" y2="12"></line>
+                            <line x1="8" y1="18" x2="16" y2="18"></line>
+                        </svg>
+                        <span class="filter-text">Filters</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Date Picker -->
+            <div class="date-picker" id="datePicker">
+                <!-- Dates will be populated by JavaScript -->
+            </div>
+
+            <!-- Showtimes Header -->
+            <div class="showtimes-header">
+                <span class="showtimes-title">Select a showtime</span>
+                <div class="view-toggle">
+                    <button class="view-btn active" aria-label="List view">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="8" y1="6" x2="21" y2="6"></line>
+                            <line x1="8" y1="12" x2="21" y2="12"></line>
+                            <line x1="8" y1="18" x2="21" y2="18"></line>
+                            <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                            <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                            <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                    </button>
+                    <button class="view-btn" aria-label="Map view">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="9"></rect>
+                            <rect x="14" y="3" width="7" height="5"></rect>
+                            <rect x="14" y="12" width="7" height="9"></rect>
+                            <rect x="3" y="16" width="7" height="5"></rect>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- No Showtimes State -->
+            <div class="no-showtimes" id="noShowtimes">
+                <h3>No Showtimes Available</h3>
+                <p>Billy Knight is coming soon to theaters. Check back for showtime announcements.</p>
+                <span class="coming-soon-badge">Coming 2026</span>
+            </div>
+
+            <!-- Synopsis -->
+            <section class="synopsis-section" id="synopsis">
+                <h2 class="synopsis-title">Synopsis</h2>
+                <p class="synopsis-text">
+                    Alex and Emily go through their aspiring careers as filmmakers along with an old time memory from Alex's father, a box of unfinished scripts and a handkerchief with the name "Billy Knight."
+                </p>
+            </section>
+
+            <!-- Social Links -->
+            <section class="social-section">
+                <h3 class="social-title">Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://www.tiktok.com/@billyknightmovie" target="_blank" class="social-link" aria-label="TikTok">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/billyknightmovie" target="_blank" class="social-link" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.youtube.com/@billyknightfilm" target="_blank" class="social-link" aria-label="YouTube">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"/>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="var(--primary-dark)"/>
+                        </svg>
+                    </a>
+                    <a href="https://x.com/bkmovie" target="_blank" class="social-link" aria-label="X">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                        </svg>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p class="footer-text">
+                    © 2026 Billy Knight Film. All Rights Reserved.<br>
+                    <a href="#">Privacy Policy</a> · <a href="#">Terms of Use</a>
+                </p>
+            </footer>
+        </section>
+    </main>
+
+    <script>
+        // Date Picker Generation
+        function generateDates() {
+            const datePicker = document.getElementById('datePicker');
+            const today = new Date();
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+
+                const dateItem = document.createElement('div');
+                dateItem.className = 'date-item' + (i === 0 ? ' active' : '');
+                dateItem.innerHTML = `
+                    <div class="date-month">${months[date.getMonth()]}</div>
+                    <div class="date-day">${date.getDate()}</div>
+                    <div class="date-weekday">${days[date.getDay()]}</div>
+                `;
+                dateItem.addEventListener('click', () => {
+                    document.querySelectorAll('.date-item').forEach(d => d.classList.remove('active'));
+                    dateItem.classList.add('active');
+                });
+                datePicker.appendChild(dateItem);
+            }
+        }
+
+        // Location Search
+        const locationInput = document.getElementById('locationInput');
+        locationInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                // For now, just show the no showtimes message
+                // In production, this would fetch real showtime data
+                const location = locationInput.value.trim();
+                if (location) {
+                    // Update UI to show searching state, then show no showtimes
+                    console.log('Searching for showtimes in:', location);
+                }
+            }
+        });
+
+        // View Toggle
+        const viewBtns = document.querySelectorAll('.view-btn');
+        viewBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                viewBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+
+        // Initialize
+        generateDates();
+
+        // Hide filter text on mobile
+        function handleResize() {
+            const filterText = document.querySelector('.filter-text');
+            if (window.innerWidth < 480) {
+                filterText.style.display = 'none';
+            } else {
+                filterText.style.display = 'inline';
+            }
+        }
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+    </script>
+</body>
+</html>
+
