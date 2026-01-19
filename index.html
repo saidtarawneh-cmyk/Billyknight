@@ -6,7 +6,7 @@
     <title>Billy Knight | Official Movie Site</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=DM+Sans:wght@300;400;500&family=Special+Elite&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400&family=DM+Sans:wght@300;400;500&family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Special+Elite&display=swap" rel="stylesheet">
     <style>
         :root {
             /* Deep cinematic palette */
@@ -173,8 +173,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            height: 25%;
-            background: linear-gradient(to bottom, transparent 0%, rgba(10, 10, 15, 0.9) 100%);
+            height: 35%;
+            background: linear-gradient(to bottom, transparent 0%, rgba(10, 10, 15, 0.95) 100%);
             z-index: 3;
             pointer-events: none;
         }
@@ -183,28 +183,51 @@
             position: relative;
             z-index: 10;
             text-align: center;
-            padding: 1.5rem 2rem;
+            padding: 2rem;
+            padding-bottom: 2.5rem;
             width: 100%;
         }
 
-        .tagline {
-            font-family: 'Bodoni Moda', Georgia, serif;
-            font-style: italic;
-            font-size: 1.1rem;
-            color: var(--gold-pale);
-            letter-spacing: 0.08em;
-            margin-bottom: 0.5rem;
-            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+        /* Movie Title - Signature Script Style */
+        .movie-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(3.5rem, 12vw, 5.5rem);
+            font-weight: 400;
+            color: #d4b968;
+            line-height: 0.9;
+            margin-bottom: 1rem;
+            text-shadow: 
+                0 2px 4px rgba(0, 0, 0, 0.4),
+                0 4px 20px rgba(0, 0, 0, 0.3),
+                0 0 60px rgba(212, 185, 104, 0.15);
+            letter-spacing: 0.02em;
         }
 
+        @media (min-width: 768px) {
+            .movie-title {
+                font-size: clamp(4.5rem, 10vw, 6.5rem);
+            }
+        }
+
+        /* Tagline - Refined Serif */
+        .tagline {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+            font-style: italic;
+            font-weight: 400;
+            font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+            color: rgba(255, 255, 255, 0.75);
+            letter-spacing: 0.12em;
+            margin-bottom: 1.25rem;
+        }
+
+        /* Release Info */
         .release-info {
             font-family: 'DM Sans', sans-serif;
-            font-size: 0.65rem;
-            color: var(--steel-300);
-            letter-spacing: 0.2em;
+            font-size: 0.6rem;
+            color: rgba(255, 255, 255, 0.5);
+            letter-spacing: 0.25em;
             text-transform: uppercase;
             font-weight: 400;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
         }
 
         /* ===== SHOWTIMES SECTION ===== */
@@ -613,11 +636,13 @@
         }
 
         .hero-content > * {
-            animation: fadeInUp 0.6s ease forwards;
+            animation: fadeInUp 0.7s ease forwards;
+            opacity: 0;
         }
 
-        .tagline { animation-delay: 0.2s; }
-        .release-info { animation-delay: 0.35s; }
+        .movie-title { animation-delay: 0.15s; }
+        .tagline { animation-delay: 0.35s; }
+        .release-info { animation-delay: 0.5s; }
 
         /* Scrollbar for desktop */
         @media (min-width: 1024px) {
@@ -655,6 +680,7 @@
             </div>
 
             <div class="hero-content">
+                <h1 class="movie-title">Billy Knight</h1>
                 <p class="tagline">A Tinseltown Fairytale</p>
                 <p class="release-info">Coming 2026</p>
             </div>
