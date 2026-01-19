@@ -137,11 +137,38 @@
 
         @media (min-width: 1024px) {
             .hero-section {
-                width: 50%;
+                width: 40%;
                 min-height: 100vh;
                 position: sticky;
                 top: 0;
             }
+        }
+
+        /* Actor Credits - Top corners */
+        .actor-credits {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            padding: 2rem 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .actor-credits {
+                padding: 2.5rem 2rem;
+            }
+        }
+
+        .actor-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: clamp(1.5rem, 5vw, 2.25rem);
+            color: #d4b968;
+            text-shadow: 
+                0 2px 8px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(212, 185, 104, 0.2);
         }
 
         .poster-container {
@@ -239,7 +266,7 @@
 
         @media (min-width: 1024px) {
             .showtimes-section {
-                width: 50%;
+                width: 60%;
                 overflow-y: auto;
                 max-height: 100vh;
             }
@@ -673,6 +700,12 @@
     <main class="main-container">
         <!-- Hero / Poster Section -->
         <section class="hero-section">
+            <!-- Actor Credits -->
+            <div class="actor-credits">
+                <span class="actor-name">Pacino</span>
+                <span class="actor-name">Heaton</span>
+            </div>
+
             <!-- Movie Poster -->
             <div class="poster-container">
                 <img src="Images/New.png" alt="Billy Knight Movie Poster">
