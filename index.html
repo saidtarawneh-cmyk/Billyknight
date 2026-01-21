@@ -464,6 +464,139 @@
             font-weight: 600;
         }
 
+        /* Theater Listing */
+        .theater-listings {
+            display: none;
+        }
+
+        .theater-listings.visible {
+            display: block;
+        }
+
+        .theater-card {
+            border: 1px solid var(--border-light);
+            margin-bottom: 1.5rem;
+        }
+
+        .theater-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .theater-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .theater-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--ink-700);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .theater-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--gold);
+        }
+
+        .theater-details h3 {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .theater-details p {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-body);
+        }
+
+        .theater-distance {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .theater-distance strong {
+            color: var(--text-dark);
+            font-weight: 600;
+        }
+
+        .theater-showtimes {
+            padding: 1.25rem;
+        }
+
+        .showtime-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .showtime-format {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            min-width: 40px;
+        }
+
+        .showtime-btn {
+            display: inline-block;
+            padding: 0.7rem 1.25rem;
+            background: var(--gold);
+            color: var(--text-dark);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .showtime-btn:hover {
+            background: var(--gold-soft);
+            transform: translateY(-1px);
+        }
+
+        /* Exclusive Event Badge */
+        .exclusive-badge {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            background: var(--ink-700);
+            color: var(--gold);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-note {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-body);
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .event-note strong {
+            color: var(--text-dark);
+        }
+
         /* Initial State */
         .initial-state {
             text-align: center;
@@ -696,7 +829,37 @@
                 <!-- No Showtimes State -->
                 <div class="no-showtimes" id="noShowtimes">
                     <h3>No Showtimes Available</h3>
-                    <p>No showtimes found near <span class="location-searched" id="locationSearched"></span>. Billy Knight is coming soon to theaters.</p>
+                    <p>No showtimes found near <span class="location-searched" id="locationSearched"></span> for this date. Try selecting January 21.</p>
+                </div>
+
+                <!-- Theater Listings -->
+                <div class="theater-listings" id="theaterListings">
+                    <div class="theater-card">
+                        <div class="theater-header">
+                            <div class="theater-info">
+                                <div class="theater-icon">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                                    </svg>
+                                </div>
+                                <div class="theater-details">
+                                    <span class="exclusive-badge">Exclusive Screening</span>
+                                    <h3>Morehouse CTEMS</h3>
+                                    <p>Morehouse College, Atlanta, GA</p>
+                                </div>
+                            </div>
+                            <div class="theater-distance">
+                                <span id="distanceText"></span>
+                            </div>
+                        </div>
+                        <div class="theater-showtimes">
+                            <div class="showtime-row">
+                                <span class="showtime-format">7:00 PM</span>
+                                <a href="https://partiful.com/e/IzhHrFHYZoSGw3Qm9DK4" target="_blank" class="showtime-btn">RSVP</a>
+                            </div>
+                            <p class="event-note"><strong>Special Event:</strong> Screening followed by Q&A with filmmakers. Doors open at 6:30 PM.</p>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Synopsis -->
@@ -801,6 +964,9 @@
         });
 
         // ===== DATE PICKER =====
+        let selectedDate = null;
+        const screeningDate = new Date(2025, 0, 21); // January 21, 2025
+
         function generateDates() {
             const datePicker = document.getElementById('datePicker');
             const today = new Date();
@@ -813,14 +979,26 @@
 
                 const dateItem = document.createElement('div');
                 dateItem.className = 'date-item' + (i === 0 ? ' active' : '');
+                dateItem.dataset.date = date.toDateString();
                 dateItem.innerHTML = `
                     <div class="date-month">${months[date.getMonth()]}</div>
                     <div class="date-day">${date.getDate()}</div>
                     <div class="date-weekday">${days[date.getDay()]}</div>
                 `;
+                
+                if (i === 0) {
+                    selectedDate = date;
+                }
+
                 dateItem.addEventListener('click', () => {
                     document.querySelectorAll('.date-item').forEach(d => d.classList.remove('active'));
                     dateItem.classList.add('active');
+                    selectedDate = new Date(dateItem.dataset.date);
+                    
+                    // Re-run search if already searched
+                    if (lastSearchedLocation) {
+                        searchShowtimes(lastSearchedLocation);
+                    }
                 });
                 datePicker.appendChild(dateItem);
             }
@@ -831,19 +1009,54 @@
         const loadingState = document.getElementById('loadingState');
         const initialState = document.getElementById('initialState');
         const noShowtimes = document.getElementById('noShowtimes');
+        const theaterListings = document.getElementById('theaterListings');
         const locationSearched = document.getElementById('locationSearched');
+        const distanceText = document.getElementById('distanceText');
+        
+        let lastSearchedLocation = null;
+
+        // Simple distance estimation (random for demo, would use real geocoding in production)
+        function estimateDistance(location) {
+            // Morehouse College is in Atlanta, GA 30314
+            const loc = location.toLowerCase();
+            if (loc.includes('atlanta') || loc.includes('30314') || loc.includes('30313') || loc.includes('morehouse')) {
+                return (Math.random() * 3 + 0.5).toFixed(1);
+            } else if (loc.includes('georgia') || loc.includes('30') && loc.length === 5) {
+                return (Math.random() * 50 + 10).toFixed(1);
+            } else {
+                return (Math.random() * 500 + 100).toFixed(0);
+            }
+        }
+
+        function isScreeningDate() {
+            if (!selectedDate) return false;
+            return selectedDate.getDate() === 21 && selectedDate.getMonth() === 0;
+        }
 
         function searchShowtimes(location) {
             if (!location.trim()) return;
+            
+            lastSearchedLocation = location;
 
             initialState.style.display = 'none';
             noShowtimes.classList.remove('visible');
+            theaterListings.classList.remove('visible');
             loadingState.classList.add('visible');
 
             setTimeout(() => {
                 loadingState.classList.remove('visible');
-                locationSearched.textContent = location;
-                noShowtimes.classList.add('visible');
+                
+                // Check if January 21 is selected
+                if (isScreeningDate()) {
+                    // Show the screening
+                    const distance = estimateDistance(location);
+                    distanceText.innerHTML = `<strong>${distance} mi</strong>`;
+                    theaterListings.classList.add('visible');
+                } else {
+                    // No showtimes for other dates
+                    locationSearched.textContent = location;
+                    noShowtimes.classList.add('visible');
+                }
             }, 1000);
         }
 
