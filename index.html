@@ -280,6 +280,59 @@
             color: var(--text-muted);
         }
 
+        /* Location Dropdown */
+        .search-wrapper {
+            position: relative;
+        }
+
+        .location-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-white);
+            border: 1px solid var(--border-light);
+            border-top: none;
+            max-height: 320px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .location-dropdown.visible {
+            display: block;
+        }
+
+        .location-item {
+            padding: 0.9rem 1rem 0.9rem 3.25rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-light);
+            transition: background 0.15s ease;
+        }
+
+        .location-item:last-child {
+            border-bottom: none;
+        }
+
+        .location-item:hover {
+            background: var(--bg-light);
+        }
+
+        .location-item-city {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 0.15rem;
+        }
+
+        .location-item-region {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
         /* Date Picker */
         .date-picker-container {
             background: var(--ink-700);
@@ -831,14 +884,17 @@
         <section class="showtimes-section">
             <!-- Search Header -->
             <div class="search-header">
-                <div class="search-bar">
-                    <div class="search-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="m21 21-4.3-4.3"></path>
-                        </svg>
+                <div class="search-wrapper">
+                    <div class="search-bar">
+                        <div class="search-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <path d="m21 21-4.3-4.3"></path>
+                            </svg>
+                        </div>
+                        <input type="text" class="search-input" placeholder="Enter city or zip code" id="locationInput" autocomplete="off">
                     </div>
-                    <input type="text" class="search-input" placeholder="Enter city or zip code" id="locationInput">
+                    <div class="location-dropdown" id="locationDropdown"></div>
                 </div>
             </div>
 
@@ -1051,6 +1107,126 @@
             }
         }
 
+        // ===== LOCATION AUTOCOMPLETE =====
+        const locationDropdown = document.getElementById('locationDropdown');
+        
+        // US cities database (expandable)
+        const cities = [
+            { city: 'Atlanta', region: 'Atlanta, GA US' },
+            { city: 'East Point', region: 'East Point, GA US' },
+            { city: 'College Park', region: 'College Park, GA US' },
+            { city: 'Decatur', region: 'Decatur, GA US' },
+            { city: 'Marietta', region: 'Marietta, GA US' },
+            { city: 'Sandy Springs', region: 'Sandy Springs, GA US' },
+            { city: 'Alpharetta', region: 'Alpharetta, GA US' },
+            { city: 'Roswell', region: 'Roswell, GA US' },
+            { city: 'Smyrna', region: 'Smyrna, GA US' },
+            { city: 'Brookhaven', region: 'Brookhaven, GA US' },
+            { city: 'Dunwoody', region: 'Dunwoody, GA US' },
+            { city: 'Lawrenceville', region: 'Lawrenceville, GA US' },
+            { city: 'Savannah', region: 'Savannah, GA US' },
+            { city: 'Augusta', region: 'Augusta, GA US' },
+            { city: 'Macon', region: 'Macon, GA US' },
+            { city: 'New York', region: 'New York, NY US' },
+            { city: 'Brooklyn', region: 'Brooklyn, NY US' },
+            { city: 'Manhattan', region: 'Manhattan, NY US' },
+            { city: 'Queens', region: 'Queens, NY US' },
+            { city: 'Los Angeles', region: 'Los Angeles, CA US' },
+            { city: 'Hollywood', region: 'Hollywood, CA US' },
+            { city: 'Beverly Hills', region: 'Beverly Hills, CA US' },
+            { city: 'Santa Monica', region: 'Santa Monica, CA US' },
+            { city: 'San Francisco', region: 'San Francisco, CA US' },
+            { city: 'San Diego', region: 'San Diego, CA US' },
+            { city: 'Chicago', region: 'Chicago, IL US' },
+            { city: 'Houston', region: 'Houston, TX US' },
+            { city: 'Dallas', region: 'Dallas, TX US' },
+            { city: 'Austin', region: 'Austin, TX US' },
+            { city: 'San Antonio', region: 'San Antonio, TX US' },
+            { city: 'Phoenix', region: 'Phoenix, AZ US' },
+            { city: 'Philadelphia', region: 'Philadelphia, PA US' },
+            { city: 'Miami', region: 'Miami, FL US' },
+            { city: 'Orlando', region: 'Orlando, FL US' },
+            { city: 'Tampa', region: 'Tampa, FL US' },
+            { city: 'Seattle', region: 'Seattle, WA US' },
+            { city: 'Denver', region: 'Denver, CO US' },
+            { city: 'Boston', region: 'Boston, MA US' },
+            { city: 'Detroit', region: 'Detroit, MI US' },
+            { city: 'Minneapolis', region: 'Minneapolis, MN US' },
+            { city: 'Charlotte', region: 'Charlotte, NC US' },
+            { city: 'Raleigh', region: 'Raleigh, NC US' },
+            { city: 'Nashville', region: 'Nashville, TN US' },
+            { city: 'Memphis', region: 'Memphis, TN US' },
+            { city: 'New Orleans', region: 'New Orleans, LA US' },
+            { city: 'Baltimore', region: 'Baltimore, MD US' },
+            { city: 'Washington', region: 'Washington, DC US' },
+            { city: 'Las Vegas', region: 'Las Vegas, NV US' },
+            { city: 'Portland', region: 'Portland, OR US' },
+            { city: 'Indianapolis', region: 'Indianapolis, IN US' },
+            { city: 'Columbus', region: 'Columbus, OH US' },
+            { city: 'Cleveland', region: 'Cleveland, OH US' },
+            { city: 'Cincinnati', region: 'Cincinnati, OH US' },
+            { city: 'Pittsburgh', region: 'Pittsburgh, PA US' },
+            { city: 'Kansas City', region: 'Kansas City, MO US' },
+            { city: 'St. Louis', region: 'St. Louis, MO US' },
+            { city: 'Milwaukee', region: 'Milwaukee, WI US' },
+            { city: 'Oklahoma City', region: 'Oklahoma City, OK US' },
+            { city: 'Salt Lake City', region: 'Salt Lake City, UT US' },
+        ];
+
+        function showLocationSuggestions(query) {
+            if (!query || query.length < 2) {
+                locationDropdown.classList.remove('visible');
+                return;
+            }
+
+            const q = query.toLowerCase();
+            const isZipcode = /^\d+$/.test(query);
+            
+            let matches = [];
+            
+            if (isZipcode) {
+                // For zipcodes, show a generic suggestion
+                matches = [{ city: query, region: 'Zip Code' }];
+            } else {
+                // Filter cities that match the query
+                matches = cities.filter(c => 
+                    c.city.toLowerCase().startsWith(q) || 
+                    c.region.toLowerCase().includes(q)
+                ).slice(0, 8);
+            }
+
+            if (matches.length === 0) {
+                locationDropdown.classList.remove('visible');
+                return;
+            }
+
+            locationDropdown.innerHTML = matches.map(m => `
+                <div class="location-item" data-location="${m.city}, ${m.region.split(', ')[1] || ''}">
+                    <div class="location-item-city">${m.city}</div>
+                    <div class="location-item-region">${m.region}</div>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            locationDropdown.querySelectorAll('.location-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const location = item.dataset.location.replace(/, $/, '');
+                    locationInput.value = location;
+                    locationDropdown.classList.remove('visible');
+                    searchShowtimes(location);
+                });
+            });
+
+            locationDropdown.classList.add('visible');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.search-wrapper')) {
+                locationDropdown.classList.remove('visible');
+            }
+        });
+
         // ===== SEARCH FUNCTIONALITY =====
         const locationInput = document.getElementById('locationInput');
         const loadingState = document.getElementById('loadingState');
@@ -1107,8 +1283,21 @@
             }, 1000);
         }
 
+        // Trigger autocomplete on input
+        locationInput.addEventListener('input', (e) => {
+            showLocationSuggestions(e.target.value);
+        });
+
+        // Focus shows dropdown if there's content
+        locationInput.addEventListener('focus', () => {
+            if (locationInput.value.length >= 2) {
+                showLocationSuggestions(locationInput.value);
+            }
+        });
+
         locationInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
+                locationDropdown.classList.remove('visible');
                 searchShowtimes(locationInput.value);
             }
         });
